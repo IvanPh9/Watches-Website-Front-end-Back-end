@@ -99,7 +99,6 @@
     font-size: 12pt;
 }
 
-/* Total and Remove */
 .cart-item-total {
     flex: 1;
     text-align: right;
@@ -110,7 +109,6 @@
     min-width: 140px;
 }
 
-/* Summary Section */
 .cart-summary {
     border-top: 1px solid var(--color-gray);
     padding-top: 20px;

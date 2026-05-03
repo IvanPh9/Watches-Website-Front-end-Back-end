@@ -158,13 +158,9 @@ window.handleAddProduct = function(event) {
         sort: urlParams.get('sort') || ''
     };
 
-    // Беремо оновлений список (catalog вже знає про новий товар)
     const filteredItems = window.catalog.getFilteredItems(currentParams);
 
-    // Малюємо таблицю заново з новим товаром
     window.renderAdminProductsTable(filteredItems);
-
-    // Опціонально: можна показати юзеру повідомлення
     alert("Product added successfully!");
 }
 
@@ -173,7 +169,6 @@ window.handleDeleteUser = function(userId) {
         const result = window.auth.deleteUser(userId);
 
         if (result.success) {
-            // Re-render the user table after successful deletion
             initAccountRouter();
         } else {
             alert(result.error);

@@ -2,11 +2,11 @@
     max-width: 1500px;
     margin: 100px auto 60px auto;
     padding: 25px 15px 15px 15px;
-    background: rgba(255, 255, 255, 0.85); /* Білий напівпрозорий колір */
-    backdrop-filter: blur(25px); /* Сильне розмиття фону під карткою */
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(25px);
     border: 1px solid rgba(81, 81, 81, 0.45);
-    border-radius: 30px; /* Сучасне заокруглення */
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); /* М'яка тінь для об'єму */
+    border-radius: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
 
 .product-breadcrumbs {
@@ -39,7 +39,6 @@
     color: var(--color-accent);
 }
 
-/* СІТКА КОНТЕНТУ */
 .product-detail-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -47,7 +46,6 @@
     align-items: start;
 }
 
-/* КАРТИНКА ТОВАРУ */
 .product-detail-image-container {
     border-radius: 20px;
     height: 70vh;
@@ -63,7 +61,6 @@
     object-fit: cover;
 }
 
-/* ТЕКСТОВИЙ БЛОК */
 .product-detail-info {
     display: flex;
     height: 100%;
@@ -92,7 +89,6 @@
     margin-bottom: 30px;
 }
 
-/* БЛОК ХАРАКТЕРИСТИК */
 .product-attributes {
     display: flex;
     flex-direction: column;
@@ -112,7 +108,7 @@
     font-weight: 700;
     color: var(--color-gray-dark);
     display: inline-block;
-    width: 120px; /* Робить так, щоб значення йшли рівною колонкою */
+    width: 120px;
     text-transform: uppercase;
     font-size: 12px;
     letter-spacing: 1px;

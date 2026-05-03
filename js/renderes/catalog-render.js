@@ -92,7 +92,6 @@ window.renderProduct = function (id) {
                         ${product.description}
                     </p>
                     
-                    <!-- Кнопка розтягнута на всю ширину для кращого вигляду -->
                     <button class="btn-primary btn-large" style="width: 100%; padding: 18px;" onclick="window.handleAddToCart(${product.id})">Add to Cart</button>
                 </div>
             </section>

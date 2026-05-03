@@ -12,7 +12,6 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--color-text);
 }
 
-/* Специфічний журнальний курсив */
 i, em {
     font-family: var(--font-heading);
     font-style: italic;

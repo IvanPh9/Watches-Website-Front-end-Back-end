@@ -44,7 +44,6 @@ window.renderAdminDashboard = function(container, activeTab) {
         </div>
     `;
 
-    // Огортаємо всю адмінку в розширену скляну панель
     container.innerHTML = `
         <div class="account-page-wrapper">
             <div class="account-box glass-panel admin-glass-panel">

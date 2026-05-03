@@ -10,8 +10,8 @@
 }
 
 .glass-panel {
-    background: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
-    backdrop-filter: blur(25px); /* The blur effect */
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid var(--color-gray);
     border-radius: 20px;
@@ -60,7 +60,7 @@
     width: 100%;
     padding: 12px 15px;
     border: 1px solid var(--color-gray);
-    border-radius: 6px; /* Rounded inputs */
+    border-radius: 6px;
     font-size: 12pt;
     background-color: var(--color-bg);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;

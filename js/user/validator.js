@@ -6,29 +6,25 @@ class Validator {
         const phoneRegex = /^\+?\d{10,15}$/;
         const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
 
-        // Перевірка імені
         if (!nameRegex.test(data.firstName)) {
             errors['reg-firstname'] = "Only letters allowed, no spaces.";
         }
 
-        // Перевірка прізвища
         if (!nameRegex.test(data.lastName)) {
             errors['reg-lastname'] = "Only letters allowed, no spaces.";
         }
 
-        // Перевірка телефону
         if (!phoneRegex.test(data.phone)) {
             errors['reg-phone'] = "Enter a valid phone number (e.g. +380123456789).";
         }
 
-        // Перевірка пароля
         if (!passRegex.test(data.password)) {
             errors['reg-password'] = "Min 6 chars: 1 uppercase, 1 lowercase, 1 number.";
         }
 
         return {
-            isValid: Object.keys(errors).length === 0, // true, якщо помилок немає
-            errors: errors // Об'єкт з усіма знайденими помилками
+            isValid: Object.keys(errors).length === 0,
+            errors: errors
         };
     }
 
