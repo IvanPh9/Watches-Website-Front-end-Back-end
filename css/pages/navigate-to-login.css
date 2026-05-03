@@ -1,0 +1,41 @@
+.not-logged-in-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    background-image: url('../../images/please.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.not-logged-in-message h2 {
+    font-size: 48pt;
+    margin-bottom: var(--space-md);
+}
+
+.not-logged-in-message p {
+    font-size: 14pt;
+    color: var(--color-gray-dark);
+    margin-bottom: var(--space-lg);
+}
+
+.not-logged-in-message a {
+    margin-top: 10px;
+}
+
+.not-logged-in-message .choice-buttons {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.not-logged-in-message .choice-buttons #Register {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+.not-logged-in-message .choice-buttons #Register:hover {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+}

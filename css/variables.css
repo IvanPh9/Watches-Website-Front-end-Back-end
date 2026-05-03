@@ -1,0 +1,20 @@
+:root {
+    --color-bg: #FFFFFF;
+    --color-text: rgb(0, 0, 0);
+    --color-accent: #b10e0e;
+    --color-accent-dark: #7f0000;
+    --color-gray: #E0E0E0;
+    --color-gray-dark: #4a4a4a;
+    --color-gray-light: #F5F5F5;
+    --color-success: #008000;
+    --color-warning: #ffcc00;
+    --color-error: #ff4d4d;
+
+    --font-heading: 'Playfair Display', 'Didot', serif;
+    --font-body: 'Inter', 'Helvetica Neue', sans-serif;
+
+    --space-sm: 30px;
+    --space-md: 20px;
+    --space-lg: 50px;
+    --space-xl: 120px;
+}

@@ -1,0 +1,33 @@
+.products-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.catalog-header {
+    margin-top: 95px;
+    text-align: center;
+    font-size: 28pt;
+}
+
+.catalog-page-container {
+    min-height: 100vh;
+}
+
+.catalog-page {
+    background-image: url('../../images/catalog.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: top;
+
+}
+
+.no-results {
+    text-align: center;
+    margin-top: 50px;
+}
+

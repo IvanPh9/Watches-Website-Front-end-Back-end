@@ -1,0 +1,70 @@
+.greetings {
+    padding-top: 25vh;
+    padding-bottom: 70px;
+    padding-right: 50px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: flex-end;
+    text-align: right;
+    background-image: url('../../images/main.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.eyebrow {
+    font-size: 10pt;
+    padding-right: 124px;
+    text-transform: uppercase;
+    letter-spacing: 4pt;
+    color: var(--color-gray-dark);
+    margin-bottom: var(--space-sm);
+}
+
+.greetings h1 {
+    font-size: 64pt;
+    margin-bottom: var(--space-md);
+}
+
+.greetings i {
+    font-size: 32pt;
+    margin-bottom: var(--space-md);
+}
+
+.subtitle {
+    max-width: 80vh;
+    margin-bottom: var(--space-lg);
+    color: var(--color-gray-dark);
+    font-size: 12pt;
+    line-height: 1.4;
+    font-weight: 300;
+}
+
+.statement-section {
+    min-height: 70vh;
+    padding: var(--space-xl) 5%;
+    border-top: 1px solid var(--color-gray);
+}
+
+.statement-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+}
+
+.statement-grid h2 {
+    font-size: 48pt;
+    max-width: 600px;
+}
+
+.statement-text p {
+    font-size: 14pt;
+    color: var(--color-gray-dark);
+    font-weight: 300;
+    line-height: 1.7;
+}
+
+.space {
+    padding-right: 62px;
+}

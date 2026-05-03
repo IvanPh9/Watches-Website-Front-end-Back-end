@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account | L'HEURE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="logo"><a href="index.html">L'HEURE</a></div>
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="catalog.html">Catalog</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="account-page-container">
+    <div class="catalog-header">
+        <h2>My Account</h2>
+    </div>
+
+    <div id="account-content" class="account-content-wrapper">
+        <p style="text-align:center;">Loading profile...</p>
+    </div>
+</main>
+
+<script type="module" src="js/user/user.js"></script>
+<script src="js/nav-updater.js"></script>
+<script type="module" src="js/routers/account-router.js"></script>
+<script type="module" src="js/renderes/account-render.js"></script>
+<script type="module" src="js/renderes/filter-render.js"></script>
+<script type="module" src="js/user/validator.js"></script>
+<script type="module" src="js/catalog/catalog.js"></script>
+
+</body>
+</html>

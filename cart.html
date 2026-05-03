@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart | L'HEURE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="cart-body">
+
+<header class="site-header">
+    <div class="logo"><a href="index.html">L'HEURE</a></div>
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="catalog.html">Catalog</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="cart-page-container">
+    <div class="catalog-header">
+        <h1>Your Cart</h1>
+    </div>
+
+    <div id="cart-content" class="cart-content-wrapper">
+        <p>Loading cart...</p>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-brand">L'HEURE</div>
+    <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+    </div>
+</footer>
+
+<script type="module" src="js/user/user.js"></script>
+<script src="js/nav-updater.js"></script>
+<script type="module" src="js/catalog/catalog.js"></script>
+<script type="module" src="js/catalog/cart.js"></script>
+<script src="js/renderes/cart-render.js"></script>
+<script src="js/routers/cart-router.js"></script>
+
+</body>
+</html>

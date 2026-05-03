@@ -1,0 +1,30 @@
+.site-footer {
+    padding: var(--space-lg) 5%;
+    background-color: var(--color-text);
+    color: var(--color-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1pt;
+}
+
+.footer-brand {
+    font-family: var(--font-heading);
+    font-size: 14pt;
+    letter-spacing: 2pt;
+}
+
+.footer-links {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.footer-links a {
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--color-gray-dark);
+}

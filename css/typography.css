@@ -1,0 +1,26 @@
+body {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--color-text);
+}
+
+/* Специфічний журнальний курсив */
+i, em {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-weight: 400;
+}
+
+input, textarea, select, button {
+    font-family: var(--font-body);
+    font-size: 14pt;
+    color: var(--color-text);
+}
