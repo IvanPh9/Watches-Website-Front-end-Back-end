@@ -86,9 +86,36 @@ class Cart {
         this.saveToStorage();
     }
 
-    clearCart() {
-        this.#_items = [];
-        this.saveToStorage();
+    verifyCart() {
+        if (!window.catalog) return;
+
+        let cartChanged = false;
+
+        this.#_items = this.#_items.filter(cartItem => {
+            const dbProduct = window.catalog.getById(cartItem.productId);
+
+            if (!dbProduct) {
+                cartChanged = true;
+                return false;
+            }
+
+            if (cartItem.quantity > dbProduct.quantity) {
+                cartItem.quantity = dbProduct.quantity;
+                cartChanged = true;
+            }
+
+            if (cartItem.quantity <= 0) {
+                cartChanged = true;
+                return false;
+            }
+
+            return true;
+        });
+
+        if (cartChanged) {
+            this.saveToStorage();
+            console.log("Кошик був автоматично оновлений відповідно до бази даних.");
+        }
     }
 
     renderCartItem(cartItem, productInfo) {

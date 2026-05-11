@@ -1,22 +1,26 @@
 import { User } from "./user.js";
 
-window.login = function(email, password) {
+window.login = async function(email, password) {
+    try {
+        const response = await fetch('http://localhost:3000/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
 
-    console.log(window.auth.usersDB);
-    const foundUser = window.auth.usersDB.find(u => u.email === email && u.password === password);
+        const data = await response.json();
 
-    if (foundUser) {
-        const newUser = new User(
-            foundUser.id,
-            foundUser.email,
-            foundUser.firstName,
-            foundUser.lastName,
-            foundUser.phoneNumber,
-            foundUser.role
-        );
-        window.auth.setCurrentUser(newUser);
+        if (!response.ok) {
+            return { success: false, error: data.error };
+        }
+
+        const user = new User(data.id, data.email, data.firstName, data.lastName, data.phone, data.role);
+
+        window.auth.setCurrentUser(user);
         return { success: true };
-    }
 
-    return { success: false, error: "Invalid email or password." };
+    } catch (error) {
+        console.error("Помилка логіну:", error);
+        return { success: false, error: "Server connection failed." };
+    }
 }

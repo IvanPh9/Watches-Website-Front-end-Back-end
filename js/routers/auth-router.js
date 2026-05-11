@@ -1,13 +1,13 @@
 import { Validator } from "../user/validator.js";
 
-window.handleLoginSubmit = function(event) {
+window.handleLoginSubmit = async function (event) {
     event.preventDefault();
     window.clearErrors();
 
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
 
-    const result = window.login(email, password);
+    const result = await window.login(email, password);
     if (result.success) {
         window.location.href = "catalog.html";
     } else {
@@ -15,7 +15,7 @@ window.handleLoginSubmit = function(event) {
     }
 };
 
-window.handleRegisterSubmit = function(event) {
+window.handleRegisterSubmit = async function (event) {
     event.preventDefault();
     window.clearErrors();
 
@@ -36,7 +36,7 @@ window.handleRegisterSubmit = function(event) {
         return;
     }
 
-    const result = window.register(
+    const result = await window.register(
         formData.firstName,
         formData.lastName,
         formData.email,

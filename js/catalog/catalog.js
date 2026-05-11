@@ -5,7 +5,6 @@ class Catalog {
 
     constructor() {
         this.#_items = [];
-        this.loadFromStorage();
     }
 
     get items() {
@@ -16,67 +15,82 @@ class Catalog {
         return this.#_items.find(item => Number(item.id) === Number(itemId));
     }
 
-    addItem(data) {
+    async addItem(data) {
+        try {
+            const response = await fetch('http://localhost:3000/api/watches', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
 
-        const newProduct = new Product(
-            data.id,
-            data.title,
-            data.price,
-            data.description,
-            data.image,
-            data.type,
-            data.material,
-            data.color,
-            data.quantity
-        );
-        this.#_items.push(newProduct);
-        this.saveToStorage();
-    }
+            if (!response.ok) throw new Error("Не вдалося додати товар в БД");
 
-    removeItem(itemId) {
-        this.#_items = this.#_items.filter(item => Number(item.id) !== Number(itemId));
-        this.saveToStorage();
-    }
+            const newDbProduct = await response.json();
 
-    saveToStorage() {
-        localStorage.setItem("catalogDB", JSON.stringify(this.#_items));
-    }
+            // Створюємо локальний об'єкт з РЕАЛЬНИМ ID, який повернула база
+            const newProduct = new Product(
+                newDbProduct.id,
+                data.title,
+                data.price,
+                data.description,
+                data.image || newDbProduct.image_url,
+                data.type,
+                data.material,
+                data.color,
+                data.quantity
+            );
 
-    loadFromStorage() {
-        const catalogData = localStorage.getItem("catalogDB");
-
-        if (catalogData && catalogData !== "[]" && catalogData !== "null") {
-            try {
-                const parsedData = JSON.parse(catalogData);
-                this.#_items = parsedData.map(item => new Product(
-                    item.id,
-                    item.title,
-                    item.price,
-                    item.description,
-                    item.image,
-                    item.type,
-                    item.material,
-                    item.color,
-                    item.quantity
-                ));
-            } catch (e) {
-                console.error("Error parsing catalogDB:", e);
-                this.initDefault();
-            }
-        } else {
-            this.initDefault();
+            this.#_items.push(newProduct);
+            // this.saveToStorage(); - більше не викликаємо
+        } catch (error) {
+            console.error("Помилка додавання товару:", error);
+            alert("Помилка при збереженні товару в базу даних.");
         }
     }
 
-    initDefault() {
-        const defaultData = [
-            { id: 1, title: 'Chronograph Elite', price: 12500, description: 'An impeccable blend of precision engineering and timeless elegance.', type: 'Chronograph', material: 'Stainless Steel', color: 'Silver', quantity: 10 },
-            { id: 2, title: 'Classic Master', price: 9800, description: 'A minimalist masterpiece for the modern professional.', type: 'Dress Watch', material: 'Gold', color: 'Gold', quantity: 5 },
-            { id: 3, title: 'Diver Pro', price: 15400, description: 'Built to withstand the depths. Water resistant up to 300 meters.', type: 'Diver', material: 'Titanium', color: 'Black', quantity: 2 }
-        ];
+    async removeItem(itemId) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/watches/${itemId}`, {
+                method: 'DELETE'
+            });
 
-        this.#_items = [];
-        defaultData.forEach(data => this.addItem(data)); // Використовуємо addItem для створення об'єктів Product
+            if (!response.ok) throw new Error("Не вдалося видалити товар з БД");
+
+            // Оновлюємо локальний масив тільки якщо БД успішно видалила
+            this.#_items = this.#_items.filter(item => Number(item.id) !== Number(itemId));
+        } catch (error) {
+            console.error("Помилка видалення товару:", error);
+            alert("Помилка при видаленні товару.");
+        }
+    }
+
+    async loadFromStorage()  {
+        try {
+            const response = await fetch('http://localhost:3000/api/watches');
+            if (!response.ok) {
+                throw new Error(`Помилка сервера: ${response.status}`);
+            }
+
+            const dbData = await response.json();
+
+            this.#_items = dbData.map(item => new Product(
+                item.id,
+                item.title,         // У базі тепер title (з таблиці watches)
+                item.price,
+                item.description,
+                item.image_url,     // Збігається з image_url у базі
+                item.type,          // Ми використали AS type у SQL-запиті
+                item.material,      // Ми використали AS material у SQL-запиті
+                item.color,         // Ми використали AS color у SQL-запиті
+                item.stock_quantity
+            ));
+
+            console.log("Дані успішно завантажені з бази:", this.#_items);
+
+        } catch (e) {
+            console.error("Помилка завантаження даних з API:", e);
+            this.initDefault();
+        }
     }
 
     renderItem(itemId, actionName) {
@@ -95,21 +109,28 @@ class Catalog {
         `;
     }
 
-    dropDatabase() {
-        localStorage.removeItem("catalogDB");
-        this.#_items = [];
-        this.initDefault();
-        this.saveToStorage();
-    }
-
-    updateProductQuantity(productId, newQuantity) {
+    async updateProductQuantity(productId, newQuantity) {
         const product = this.getById(productId);
-        if (product) {
-            product.quantity = Math.max(0, parseInt(newQuantity));
-            this.saveToStorage();
+        if (!product) return false;
+
+        const qty = Math.max(0, parseInt(newQuantity));
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/watches/${productId}/quantity`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ quantity: qty })
+            });
+
+            if (!response.ok) throw new Error("Не вдалося оновити кількість в БД");
+
+            // Оновлюємо локально
+            product.quantity = qty;
             return true;
+        } catch (error) {
+            console.error("Помилка оновлення кількості:", error);
+            return false;
         }
-        return false;
     }
 
     getFilteredItems(params) {

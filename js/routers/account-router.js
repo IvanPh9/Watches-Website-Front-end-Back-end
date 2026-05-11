@@ -1,4 +1,7 @@
 import { Validator } from "../user/validator.js";
+import { initConstants } from "../utils/constants.js";
+import "../renderes/account-render.js";
+import "../renderes/filter-render.js";
 
 window.navigateAccount = function(tab, queryString = '') {
     const url = `?tab=${tab}${queryString ? '&' + queryString : ''}`;
@@ -6,7 +9,7 @@ window.navigateAccount = function(tab, queryString = '') {
     initAccountRouter();
 }
 
-function initAccountRouter() {
+async function initAccountRouter() {
     const isLoggedIn = window.auth ? window.auth.isLoggedIn() : false;
     if (!isLoggedIn) {
         window.location.href = "catalog.html";
@@ -27,7 +30,15 @@ function initAccountRouter() {
     window.renderAdminDashboard(container, tab);
 
     if (tab === 'users') {
-        window.renderAdminUsers();
+        try {
+            const response = await fetch('http://localhost:3000/api/users');
+            if (response.ok) {
+                const users = await response.json();
+                window.renderAdminUsers(users);
+            }
+        } catch (e) {
+            console.error("Помилка завантаження користувачів", e);
+        }
     } else if (tab === 'products') {
         const currentParams = {
             search: urlParams.get('search') || '',
@@ -51,10 +62,12 @@ function initAccountRouter() {
     }
 }
 
-window.handleProfileUpdate = function(event) {
+window.handleProfileUpdate = async function(event) {
     event.preventDefault();
     document.querySelectorAll('.field-error').forEach(el => el.style.display = 'none');
-    document.getElementById('prof-success-msg').style.display = 'none';
+
+    const successMsg = document.getElementById('prof-success-msg');
+    if (successMsg) successMsg.style.display = 'none';
 
     const formData = {
         firstName: document.getElementById('prof-firstname').value.trim(),
@@ -75,9 +88,10 @@ window.handleProfileUpdate = function(event) {
         return;
     }
 
-    const result = window.auth.updateUserData(formData);
+    const result = await window.auth.updateUserData(formData);
+
     if (result.success) {
-        document.getElementById('prof-success-msg').style.display = 'block';
+        if (successMsg) successMsg.style.display = 'block';
     } else {
         alert("Error: " + result.error);
     }
@@ -104,28 +118,28 @@ window.handleAdminResetFilters = function() {
     window.navigateAccount('products', '');
 }
 
-window.handleDeleteProduct = function(productId) {
+window.handleDeleteProduct = async function(productId) {
     if (confirm("Are you sure you want to delete this product?")) {
-        window.catalog.removeItem(productId);
+        await window.catalog.removeItem(productId);
         initAccountRouter();
     }
 }
 
-window.handleStepQuantity = function(productId, step) {
+window.handleStepQuantity = async function (productId, step) {
     const product = window.catalog.getById(productId);
     if (product) {
         const newQty = (product.quantity || 0) + step;
-        window.catalog.updateProductQuantity(productId, newQty);
+        await window.catalog.updateProductQuantity(productId, newQty);
         initAccountRouter();
     }
 };
 
-window.handleInputQuantity = function(productId, value) {
-    window.catalog.updateProductQuantity(productId, value);
+window.handleInputQuantity = async function(productId, value) {
+    await window.catalog.updateProductQuantity(productId, value);
     initAccountRouter();
 };
 
-window.handleAddProduct = function(event) {
+window.handleAddProduct = async function (event) {
     event.preventDefault();
 
     const title = document.getElementById('new-prod-title').value.trim();
@@ -138,13 +152,12 @@ window.handleAddProduct = function(event) {
     const imageUrlInput = document.getElementById('new-prod-image-url').value.trim();
     const imageUrl = imageUrlInput !== "" ? imageUrlInput : null;
 
-    window.catalog.addItem({
+    await window.catalog.addItem({
         id: Date.now(), title, price, quantity, type, material, color, description, image: imageUrl
     });
 
     const form = document.querySelector('.account-form');
-    if(form) form.reset();
-
+    if (form) form.reset();
 
     const urlParams = new URLSearchParams(window.location.search);
     const currentParams = {
@@ -164,22 +177,38 @@ window.handleAddProduct = function(event) {
     alert("Product added successfully!");
 }
 
-window.handleDeleteUser = function(userId) {
+window.handleDeleteUser = async function(userId) {
     if (confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
-        const result = window.auth.deleteUser(userId);
+        try {
+            const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+                method: 'DELETE'
+            });
 
-        if (result.success) {
-            initAccountRouter();
-        } else {
-            alert(result.error);
+            if (response.ok) {
+                initAccountRouter();
+            } else {
+                const data = await response.json();
+                alert(data.error || "Failed to delete user");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Server connection failed.");
         }
     }
 }
 
-window.addEventListener('popstate', () => {
+window.addEventListener('popstate', async () => {
+    await initConstants();
+    if (window.catalog) {
+        await window.catalog.loadFromStorage();
+    }
     initAccountRouter();
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(initAccountRouter, 50);
+document.addEventListener("DOMContentLoaded", async () => {
+    await initConstants();
+    if (window.catalog) {
+        await window.catalog.loadFromStorage();
+    }
+    initAccountRouter();
 });

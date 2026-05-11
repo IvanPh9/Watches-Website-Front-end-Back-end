@@ -55,11 +55,10 @@ window.renderAdminDashboard = function(container, activeTab) {
     `;
 }
 
-window.renderAdminUsers = function() {
+window.renderAdminUsers = function(users) {
     const container = document.getElementById('admin-content-area');
     if (!container) return;
 
-    const users = window.auth.usersDB;
     let rowsHTML = users.map(u => `
         <tr>
             <td>${u.id}</td>
@@ -92,7 +91,6 @@ window.renderAdminProductsLayout = function() {
     const materialOptions = WATCH_MATERIALS.map(m => `<option value="${m}">${m}</option>`).join('');
     const colorOptions = WATCH_COLORS.map(c => `<option value="${c}">${c}</option>`).join('');
 
-    // Додано класи form-control до всіх інпутів
     container.innerHTML = `
         <div class="admin-catalog-layout">
             <div id="filters-container" class="admin-sidebar"></div>

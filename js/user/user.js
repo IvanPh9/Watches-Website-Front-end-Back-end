@@ -5,7 +5,6 @@ class User {
     #_lastName;
     #_phoneNumber;
     #_role;
-    #_password;
 
     constructor(id, email, firstName, lastName, phoneNumber, role, password) {
         this.#_id = id;
@@ -14,7 +13,6 @@ class User {
         this.#_lastName = lastName;
         this.#_phoneNumber = phoneNumber;
         this.#_role = role;
-        this.#_password = password;
     }
 
     toJSON() {
@@ -25,11 +23,9 @@ class User {
             lastName: this.#_lastName,
             phoneNumber: this.#_phoneNumber,
             role: this.#_role,
-            password: this.#_password
         };
     }
-    get password() { return this.#_password; }
-    set password(value) { this.#_password = value; }
+
     get role() { return this.#_role; }
     get id() { return this.#_id; }
     get email() { return this.#_email; }
@@ -44,55 +40,19 @@ class User {
 
 class AuthManager {
     #_currentUser;
-    #_usersDB;
 
     constructor() {
         this.#_currentUser = null;
-        this.#_usersDB = [];
-        this.loadDatabase();
         this.loadCurrentUser();
     }
 
     get currentUser() { return this.#_currentUser; }
-    get usersDB() { return this.#_usersDB; }
-
-    addUser(user) {
-        this.#_usersDB.push(user);
-        this.saveDatabase();
-    }
-
-    saveDatabase() {
-        localStorage.setItem("usersDB", JSON.stringify(this.#_usersDB));
-    }
-
-    loadDatabase() {
-        const db = localStorage.getItem("usersDB");
-        if (db && db !== "null") {
-            try {
-                const parsed = JSON.parse(db);
-                this.#_usersDB = parsed.map(u => new User(
-                    u.id || u._id,
-                    u.email || u._email,
-                    u.firstName || u._firstName,
-                    u.lastName || u._lastName,
-                    u.phoneNumber || u._phoneNumber || u.phone,
-                    u.role || u._role,
-                u.password || u._password
-                ));
-            } catch (e) { console.error("Error parsing usersDB:", e); }
-        } else {
-            const defaultUser = new User(1, "vaniko.vstaniko@gmail.com", "Vaniko", "Vstaniko", "+380123456789", "admin", "123456");
-            this.#_usersDB.push(defaultUser);
-            this.saveDatabase();
-        }
-    }
 
     loadCurrentUser() {
         const userData = localStorage.getItem("currentUser");
         if (userData && userData !== "null") {
             try {
                 const u = JSON.parse(userData);
-                // Така сама "всеїдна" перевірка
                 if (u && (u.email || u._email)) {
                     this.#_currentUser = new User(
                         u.id || u._id,
@@ -100,8 +60,7 @@ class AuthManager {
                         u.firstName || u._firstName,
                         u.lastName || u._lastName,
                         u.phoneNumber || u._phoneNumber || u.phone,
-                        u.role || u._role,
-                    u.password || u._password
+                        u.role || u._role
                     );
                 }
             } catch (e) { console.error("Error parsing currentUser:", e); }
@@ -120,45 +79,36 @@ class AuthManager {
     logout() {
         this.#_currentUser = null;
         localStorage.removeItem("currentUser");
+        window.location.href = "catalog.html";
     }
 
-    updateUserData(newData) {
+    async updateUserData(newData) {
         if (!this.#_currentUser) return { success: false, error: "Not logged in" };
 
-        const index = this.#_usersDB.findIndex(u => Number(u.id) === Number(this.#_currentUser.id));
-        if (index !== -1) {
-            this.#_usersDB[index].firstName = newData.firstName;
-            this.#_usersDB[index].lastName = newData.lastName;
-            this.#_usersDB[index].phoneNumber = newData.phone;
-            this.saveDatabase();
+        try {
+            const response = await fetch(`http://localhost:3000/api/users/${this.#_currentUser.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newData)
+            });
 
-            this.#_currentUser.firstName = newData.firstName;
-            this.#_currentUser.lastName = newData.lastName;
-            this.#_currentUser.phoneNumber = newData.phone;
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Failed to update profile");
+            }
+
+            this.#_currentUser.firstName = data.firstName;
+            this.#_currentUser.lastName = data.lastName;
+            this.#_currentUser.phoneNumber = data.phone;
 
             localStorage.setItem("currentUser", JSON.stringify(this.#_currentUser));
+
             return { success: true };
+        } catch (error) {
+            console.error("Update error:", error);
+            return { success: false, error: error.message };
         }
-        return { success: false, error: "User not found in database." };
-    }
-
-    deleteUser(userId) {
-        if (!this.#_currentUser || this.#_currentUser.role !== 'admin') {
-            return { success: false, error: "Access denied. Admins only." };
-        }
-        if (Number(this.#_currentUser.id) === Number(userId)) {
-            return { success: false, error: "You cannot delete yourself!" };
-        }
-
-        this.#_usersDB = this.#_usersDB.filter(u => Number(u.id) !== Number(userId));
-        this.saveDatabase();
-        return { success: true };
-    }
-
-    dropDatabase() {
-        this.#_usersDB = [];
-        this.saveDatabase();
-        this.logout();
     }
 }
 

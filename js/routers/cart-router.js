@@ -1,14 +1,22 @@
-document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(() => {
-        const isLoggedIn = window.auth ? window.auth.isLoggedIn() : false;
+document.addEventListener("DOMContentLoaded", async () => {
+    const isLoggedIn = window.auth ? window.auth.isLoggedIn() : false;
 
-        if (!isLoggedIn) {
-            window.location.href = "catalog.html";
-            return;
+    if (!isLoggedIn) {
+        window.location.href = "catalog.html";
+        return;
+    }
+
+    if (window.catalog) {
+        await window.catalog.loadFromStorage();
+
+        if (window.cart) {
+            window.cart.verifyCart();
         }
+    }
 
-        renderCartPage();
-    }, 50);
+    if (typeof window.renderCartPage === 'function') {
+        window.renderCartPage();
+    }
 });
 
 

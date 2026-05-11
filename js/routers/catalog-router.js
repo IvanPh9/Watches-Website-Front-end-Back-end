@@ -1,3 +1,5 @@
+import { initConstants } from "../utils/constants.js";
+
 window.navigate = function(view, id = null, queryString = '') {
     if (view === 'product') {
         window.location.href = '?id=' + id;
@@ -85,10 +87,14 @@ window.handleAddToCart = function(productId) {
     }
 };
 
-window.addEventListener('popstate', () => {
+window.addEventListener('popstate', async () => {
+    await initConstants();
+    await window.catalog.loadFromStorage();
     initRouter();
 });
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
+    await initConstants();
+    await window.catalog.loadFromStorage();
     initRouter();
 });

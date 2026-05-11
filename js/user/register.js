@@ -1,24 +1,26 @@
 import { User } from "./user.js";
 
-window.register = function(firstName, lastName, email, phone, password) {
+window.register = async function(firstName, lastName, email, phone, password) {
+    try {
+        const response = await fetch('http://localhost:3000/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ firstName, lastName, email, phone, password })
+        });
 
-    if ( window.auth.usersDB.find(u => u.email === email)) {
-        return { success: false, error: "This email is already registered.", field: "reg-email" };
+        const data = await response.json();
+
+        if (!response.ok) {
+            return { success: false, error: data.error, field: "reg-email" };
+        }
+
+        const newUser = new User(data.id, data.email, data.first_name, data.last_name, data.phone_number, data.role);
+
+        window.auth.setCurrentUser(newUser);
+        return { success: true };
+
+    } catch (error) {
+        console.error("Помилка реєстрації:", error);
+        return { success: false, error: "Server connection failed." };
     }
-
-    const newUserRecord = new User(
-        Date.now(),
-        email,
-        firstName,
-        lastName,
-        phone,
-        "user",
-        password
-    );
-
-    window.auth.addUser(newUserRecord);
-    const newUser = window.auth.usersDB.find(u => u.email === email);
-    window.auth.setCurrentUser(newUser);
-
-    return { success: true };
 }
