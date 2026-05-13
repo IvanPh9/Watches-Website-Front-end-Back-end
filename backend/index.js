@@ -44,12 +44,10 @@ app.get('/api/watches', async (req, res) => {
 
 app.get('/api/filters', async (req, res) => {
     try {
-        // Робимо три паралельні запити до бази
         const categories = await pool.query('SELECT name FROM categories ORDER BY name');
         const materials = await pool.query('SELECT name FROM materials ORDER BY name');
         const colors = await pool.query('SELECT name FROM colors ORDER BY name');
 
-        // Віддаємо фронтенду зручний об'єкт з трьома масивами
         res.json({
             types: categories.rows.map(row => row.name),
             materials: materials.rows.map(row => row.name),
