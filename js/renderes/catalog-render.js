@@ -10,8 +10,8 @@ window.renderNotLoggedIn = function() {
             <h2>Please Log In</h2>
             <p>You need to log in to view our collection. Click the button below to go to the login page.</p>
             <div class="choice-buttons">
-                 <a href="auth?action=login" class="btn-primary" id="Login">Go to Login</a>
-                 <a href="auth?action=register" class="btn-primary" id="Register">Go to Register</a>
+                 <a href="auth.html?action=login" class="btn-primary" id="Login">Go to Login</a>
+                 <a href="auth.html?action=register" class="btn-primary" id="Register">Go to Register</a>
             </div>    
         </div>
     `;
@@ -81,7 +81,6 @@ window.renderProduct = function (id) {
                     <h2 class="product-detail-title">${product.title}</h2>
                     <div class="product-detail-price">${product.price.toLocaleString()} ₴</div>
                     
-                    <!-- Новий блок з характеристиками -->
                     <div class="product-attributes">
                         <div class="attr-item"><span class="attr-label">Type:</span> ${product.type}</div>
                         <div class="attr-item"><span class="attr-label">Material:</span> ${product.material}</div>

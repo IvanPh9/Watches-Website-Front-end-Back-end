@@ -36,7 +36,7 @@ window.renderLoginForm = function() {
                 <button type="submit" class="btn-primary btn-full-width">Log In</button>
             </form>
             <div class="auth-footer">
-                <p>Don't have an account? <a href="auth?action=register" class="auth-link">Register here</a></p>
+                <p>Don't have an account? <a href="auth.html?action=register" class="auth-link">Register here</a></p>
                 <p><a href="index.html" class="auth-link back-link">← Back to Home</a></p>
             </div>
         </div>
@@ -83,7 +83,7 @@ window.renderRegisterForm = function() {
                 <button type="submit" class="btn-primary btn-full-width">Register</button>
             </form>
             <div class="auth-footer">
-                <p>Already have an account? <a href="auth?action=login" class="auth-link">Log in here</a></p>
+                <p>Already have an account? <a href="auth.html?action=login" class="auth-link">Log in here</a></p>
                 <p><a href="index.html" class="auth-link back-link">← Back to Home</a></p>
             </div>
         </div>

@@ -30,7 +30,8 @@ app.get('/api/watches', async (req, res) => {
             FROM watches w
             LEFT JOIN categories c ON w.category_id = c.id
             LEFT JOIN materials m ON w.material_id = m.id
-            LEFT JOIN colors col ON w.color_id = col.id;
+            LEFT JOIN colors col ON w.color_id = col.id
+            ORDER BY w.id ASC;
         `;
 
         const result = await pool.query(query);

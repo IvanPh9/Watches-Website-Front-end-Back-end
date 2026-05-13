@@ -12,8 +12,31 @@ services:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      # Цей рядок автоматично завантажить наші таблиці при створенні бази
       - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend:
+    build: ./backend
+    container_name: watches_backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=admin
+      - DB_PASSWORD=adminpassword
+      - DB_NAME=watches_db
+    depends_on:
+      - db
+
+  frontend:
+    image: nginx:alpine
+    container_name: watches_frontend
+    ports:
+      - "5000:80"
+    volumes:
+      - ./:/usr/share/nginx/html
+    depends_on:
+      - backend
 
 volumes:
   pgdata:

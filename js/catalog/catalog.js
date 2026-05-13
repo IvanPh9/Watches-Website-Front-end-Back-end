@@ -27,7 +27,6 @@ class Catalog {
 
             const newDbProduct = await response.json();
 
-            // Створюємо локальний об'єкт з РЕАЛЬНИМ ID, який повернула база
             const newProduct = new Product(
                 newDbProduct.id,
                 data.title,
@@ -41,7 +40,6 @@ class Catalog {
             );
 
             this.#_items.push(newProduct);
-            // this.saveToStorage(); - більше не викликаємо
         } catch (error) {
             console.error("Помилка додавання товару:", error);
             alert("Помилка при збереженні товару в базу даних.");
@@ -56,7 +54,6 @@ class Catalog {
 
             if (!response.ok) throw new Error("Не вдалося видалити товар з БД");
 
-            // Оновлюємо локальний масив тільки якщо БД успішно видалила
             this.#_items = this.#_items.filter(item => Number(item.id) !== Number(itemId));
         } catch (error) {
             console.error("Помилка видалення товару:", error);
@@ -75,13 +72,13 @@ class Catalog {
 
             this.#_items = dbData.map(item => new Product(
                 item.id,
-                item.title,         // У базі тепер title (з таблиці watches)
+                item.title,
                 item.price,
                 item.description,
-                item.image_url,     // Збігається з image_url у базі
-                item.type,          // Ми використали AS type у SQL-запиті
-                item.material,      // Ми використали AS material у SQL-запиті
-                item.color,         // Ми використали AS color у SQL-запиті
+                item.image_url,
+                item.type,
+                item.material,
+                item.color,
                 item.stock_quantity
             ));
 
@@ -124,7 +121,6 @@ class Catalog {
 
             if (!response.ok) throw new Error("Не вдалося оновити кількість в БД");
 
-            // Оновлюємо локально
             product.quantity = qty;
             return true;
         } catch (error) {
